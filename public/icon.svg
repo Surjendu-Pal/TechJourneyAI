@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="tj-pri" x1="60" y1="60" x2="452" y2="452" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="35%" stop-color="#3B82F6" />
+      <stop offset="70%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#C084FC" />
+    </linearGradient>
+    <linearGradient id="tj-acc" x1="102" y1="410" x2="435" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="50%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+    <radialGradient id="tj-glow" cx="256" cy="256" r="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#090D1A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- App Icon Base Squircle -->
+  <rect width="512" height="512" rx="128" fill="#090D1A"/>
+  <rect x="8" y="8" width="496" height="496" rx="120" fill="none" stroke="url(#tj-pri)" stroke-width="6" stroke-opacity="0.4"/>
+  <circle cx="256" cy="246" r="225" fill="url(#tj-glow)" />
+
+  <!-- Transform 100x100 to 512x512 with padding (scale 4.0, translate 56, 56) -->
+  <g transform="translate(56, 56) scale(4.0)">
+    <!-- 1. TOP 'T' TECH BEAM -->
+    <path
+      d="M20 22 C20 20.34 21.34 19 23 19 L77 19 C78.66 19 80 20.34 80 22 L80 27 C80 28.66 78.66 30 77 30 L58 30 C56.9 30 56 30.9 56 32 L56 34 L44 34 L44 32 C44 30.9 43.1 30 42 30 L23 30 C21.34 30 20 28.66 20 27 Z"
+      fill="url(#tj-pri)"
+    />
+
+    <!-- 2. 'J' & LEARNING JOURNEY SWOOSH -->
+    <path
+      d="M50 32 L50 56 C50 67 41 75 30 75 C21 75 16 69 16 63 C16 58.5 19.5 55 24 55 C27.5 55 30.5 57.5 31.5 61 C32 62.5 33.5 64 35.5 64 C39.5 64 42.5 60.5 42.5 55 L42.5 40 L57.5 40 L57.5 56 C57.5 73.5 45 83 29 83 C14 83 7 73 7 62 C7 52 14.5 45 24 45 C26.5 45 28.8 45.6 31 46.5 L31 32 Z"
+      fill="url(#tj-pri)"
+      fill-rule="evenodd"
+    />
+
+    <!-- 3. EXPONENTIAL DIGITAL TRAJECTORY -->
+    <path
+      d="M48 68 C58 68 68 60 74 48 C77 42 80 32 85 24 L91 32 C86 42 81 54 74 63 C66 73 54 80 44 81 Z"
+      fill="url(#tj-acc)"
+      opacity="0.95"
+    />
+
+    <!-- 4. PINNACLE AI DIAMOND SPARK -->
+    <path
+      d="M86 16 L88.5 22.5 L95 25 L88.5 27.5 L86 34 L83.5 27.5 L77 25 L83.5 22.5 Z"
+      fill="#FFFFFF"
+    />
+    <circle cx="86" cy="25" r="2.5" fill="#38BDF8" />
+
+    <!-- 5. MILESTONE CONSTELLATION NODES -->
+    <circle cx="24" cy="62" r="2.2" fill="#FFFFFF" opacity="0.9" />
+    <circle cx="50" cy="46" r="2" fill="#E0E7FF" opacity="0.8" />
+    <circle cx="68" cy="48" r="2.5" fill="#C084FC" />
+    <circle cx="68" cy="48" r="1.2" fill="#FFFFFF" />
+
+    <!-- Energy Pulse Line -->
+    <line
+      x1="26"
+      y1="24.5"
+      x2="74"
+      y2="24.5"
+      stroke="#FFFFFF"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      opacity="0.75"
+    />
+  </g>
+</svg>

@@ -1,0 +1,165 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Master catch-all deny rule
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email == 'enginnerboy079@gmail.com' &&
+        request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSuperAdmin() || (
+        isSignedIn() &&
+        exists(/databases/$(database)/documents/roles/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.role in ['ADMIN', 'SUPER_ADMIN']
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Role-based access control assignments
+    match /roles/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create, update, delete: if isSuperAdmin() && isValidId(userId);
+    }
+
+    // Platform feature flags (read by all authenticated users, written only by admins)
+    match /feature_flags/{flagId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(flagId);
+    }
+
+    // AI configuration settings (read and written only by admins)
+    match /ai_settings/{settingId} {
+      allow read, write: if isAdmin() && isValidId(settingId);
+    }
+
+    // Content Management System (Lessons, Articles, etc.)
+    match /content_items/{itemId} {
+      allow get: if (resource.data.status == 'Published' && isSignedIn()) || isAdmin();
+      allow list: if isSignedIn();
+      allow write: if isAdmin() && isValidId(itemId);
+    }
+
+    // DSA Problems (Admin-managed problem repository)
+    match /dsa_problems/{problemId} {
+      allow get: if (resource.data.status == 'Published' && isSignedIn()) || isAdmin();
+      allow list: if isSignedIn();
+      allow write: if isAdmin() && isValidId(problemId);
+    }
+
+    // Knowledge Feed & Shorts
+    match /knowledge_feed/{postId} {
+      allow get: if (resource.data.status == 'Published' && isSignedIn()) || isAdmin();
+      allow list: if isSignedIn();
+      allow write: if isAdmin() && isValidId(postId);
+    }
+
+    // Competitions & Challenges
+    match /competitions/{compId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(compId);
+    }
+
+    // Opportunities & Internships
+    match /opportunities/{oppId} {
+      allow get: if (resource.data.status == 'Published' && isSignedIn()) || isAdmin();
+      allow list: if isSignedIn();
+      allow write: if isAdmin() && isValidId(oppId);
+    }
+
+    // Announcements
+    match /announcements/{annId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(annId);
+    }
+
+    // Community Reports & Moderation
+    match /community_moderation/{reportId} {
+      allow create: if isSignedIn() && isValidId(reportId);
+      allow read, update, delete: if isAdmin() && isValidId(reportId);
+    }
+
+    // Admin Audit Logs (Append-only: No deletion or overwrite allowed)
+    match /admin_audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin() && isValidId(logId);
+      allow update, delete: if false;
+    }
+
+    // Users and their isolated subcollections
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create, update: if (isOwner(userId) || isAdmin()) && isValidId(userId);
+      allow delete: if isAdmin();
+
+      // Roadmaps
+      match /roadmaps/{roadmapId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(roadmapId);
+      }
+
+      // Daily Plans
+      match /dailyPlans/{planId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(planId);
+      }
+
+      // Problem Attempts
+      match /problemAttempts/{attemptId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(attemptId);
+      }
+
+      // Quiz Attempts
+      match /quizAttempts/{attemptId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(attemptId);
+      }
+
+      // Study Sessions
+      match /studySessions/{sessionId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(sessionId);
+      }
+
+      // Progress Summaries
+      match /progress/{progressId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(progressId);
+      }
+
+      // Achievements
+      match /achievements/{achievementId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(achievementId);
+      }
+
+      // Notifications
+      match /notifications/{notificationId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(notificationId);
+      }
+
+      // AI Memory
+      match /aiMemory/{memoryId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(memoryId);
+      }
+    }
+
+    // Developer / Admin audit log
+    match /systemActivities/{activityId} {
+      allow read, update, delete: if isAdmin() && isValidId(activityId);
+      allow create: if isSignedIn() && isValidId(activityId);
+    }
+  }
+}

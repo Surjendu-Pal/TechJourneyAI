@@ -1,0 +1,6 @@
+{
+  "name": "TechJourney AI",
+  "description": "Mobile-first AI technology mentor guiding learners from beginner to job-ready software developer with personalized roadmaps, DSA training, and adaptive daily missions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
